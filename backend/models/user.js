@@ -13,7 +13,18 @@ const userSchema = new Schema({
   password: {
       type: String,
       required: true,
+  },
+  graduation: {
+    type: let, 
+    required: false,
+    trim: true,
+    maxlength: 6 //MMYYYY
+  },
+  completedCourses: {
+    type: Array (String), 
+    required: true,
   }
+
 });
 
 const User = mongoose.model('User', userSchema);
