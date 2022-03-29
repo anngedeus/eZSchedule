@@ -3,6 +3,7 @@
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import { writeFile } from 'fs/promises';
+import { basename } from 'path';
 
 const outputFile = 'degree-info.json';
 const prettyPrint = true;
@@ -18,6 +19,7 @@ const programListURL = (new URL('/UGRD/programs/', rootURL)).href;
  * @property {'major'|'minor'|'certificate'} type
  * @property {string} shortDescription
  * @property {string} url
+ * @property {string} code
  * @property {string} heroURL
  * @property {string} description
  * @property {string} college
@@ -72,12 +74,21 @@ function extractImageURL(elm) {
 			}
 		}
 
+		const imgURL = extractImageURL($('span.image', elm));
+
+		let code = null;
+
+		if (url != null) {
+			code = basename((new URL(url)).pathname);
+		}
+
 		programs.push({
-			imageURL: (new URL(extractImageURL($('span.image', elm)), programListURL)).href,
+			imageURL: (imgURL !== null) ? (new URL(imgURL, programListURL)).href : null,
 			title: $('span.title', elm).text().trim(),
 			type: $('span.type', elm).text().trim(),
 			shortDescription: description,
 			url,
+			code,
 		});
 	});
 }
@@ -94,7 +105,8 @@ async function processProgram(program) {
 
 	console.log(`Processing additional information for ${program.title} (${program.type})`);
 
-	program.heroURL = (new URL(extractImageURL($('#page-hero')), programListURL)).href;
+	const heroURL = extractImageURL($('#page-hero'));
+	program.heroURL = (heroURL !== null) ? (new URL(heroURL, programListURL)).href : null;
 	program.description = $('#intro-text').text();
 
 	const aboutItems = $('#about-major > ul > li').toArray();
