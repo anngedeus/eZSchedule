@@ -1,0 +1,164 @@
+{
+	"valid": [
+		[
+			"Prereq: (CHM 2046 or CHM 2096) and MAC 2313 with minimum grades of C. Coreq: PHY 2049, MAP 2302, and BME 1008.",
+			{
+				"prerequisites": {
+					"intersection": [
+						{
+							"union": [
+								"CHM2046",
+								"CHM2096"
+							]
+						},
+						"MAC2313"
+					]
+				},
+				"corequisites": {
+					"intersection": [
+						"PHY2049",
+						"MAP2302",
+						"BME1008"
+					]
+				}
+			}
+		],
+		[
+			"Prereq: COP 3530, and any one programming course (COP 2800, COP 3275, or COP 3229).",
+			{
+				"prerequisites": {
+					"intersection": [
+						"COP3530",
+						{
+							"union": [
+								"COP2800",
+								"COP3275",
+								"COP3229"
+							]
+						}
+					]
+				},
+				"corequisites": null
+			}
+		],
+		[
+			"Prereq: BSC 2011 and (CHM 2046 or CHM 2047) with a minimum grades of C. Recommended: ((PHY 2053 and PHY 2054) or (PHY 2060 and PHY 2061)) and PCB 3063 and PCB 4674.",
+			{
+				"prerequisites": {
+					"intersection": [
+						"BSC2011",
+						{
+							"union": [
+								"CHM2046",
+								"CHM2047"
+							]
+						}
+					]
+				},
+				"corequisites": null
+			}
+		],
+		[
+			"Prereq: CHM 2045L AND (MAC 1147 or (MAC 1140 and MAC 1114) or MAC 23##) AND (CHM 2045 or CHM 2095 or CHM 2050).",
+			{
+				"prerequisites": {
+					"intersection": [
+						"CHM2045L",
+						{
+							"union": [
+								"MAC1147",
+								{
+									"intersection": [
+										"MAC1140",
+										"MAC1114"
+									]
+								},
+								"MAC23##"
+							]
+						},
+						{
+							"union": [
+								"CHM2045",
+								"CHM2095",
+								"CHM2050"
+							]
+						}
+					]
+				},
+				"corequisites": null
+			}
+		],
+		[
+			"Prereq: BSC 2009 and BSC 2009L or equivalent courses, OR BSC 2010 and BSC 2010L or equivalent courses, OR CHM 2045 and CHM 2045L or equivalent courses.",
+			{
+				"prerequisites": {
+					"union": [
+						{
+							"intersection": [
+								"BSC2009",
+								"BSC2009L"
+							]
+						},
+						{
+							"intersection": [
+								"BSC2010",
+								"BSC2010L"
+							]
+						},
+						{
+							"intersection": [
+								"CHM2045",
+								"CHM2045L"
+							]
+						}
+					]
+				},
+				"corequisites": null
+			}
+		],
+		[
+			"Prereq: AEB 3103, 4511; STA 3023.",
+			{
+				"prerequisites": {
+					"intersection": [
+						"AEB3103",
+						"AEB4511",
+						"STA3023"
+					]
+				},
+				"corequisites": null
+			}
+		],
+		[
+			"Prereq: (MAC 2311 or MAC 3472) and (COP 3502 or equivalent), all with a minimum grades of C; Coreq: COP 3504 or COP 3503.",
+			{
+				"prerequisites": {
+					"intersection": [
+						{
+							"union": [
+								"MAC2311",
+								"MAC3472"
+							]
+						},
+						"COP3502"
+					]
+				},
+				"corequisites": {
+					"union": [
+						"COP3504",
+						"COP3503"
+					]
+				}
+			}
+		]
+	],
+	"invalid": [
+		"foo",
+		"Prereq:",
+		"Coreq:",
+		"Recommended:",
+		"Prereq COP 4020",
+		"",
+		null
+	]
+}
