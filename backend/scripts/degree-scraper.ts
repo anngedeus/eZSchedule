@@ -11,34 +11,25 @@ const prettyPrint = true;
 const rootURL = 'https://catalog.ufl.edu';
 const programListURL = (new URL('/UGRD/programs/', rootURL)).href;
 
-/**
- * @typedef ProgramInfo
- * @type {object}
- * @property {string} imageURL
- * @property {string} title
- * @property {'major'|'minor'|'certificate'} type
- * @property {string} shortDescription
- * @property {string} url
- * @property {string} code
- * @property {string} heroURL
- * @property {string} description
- * @property {string} college
- * @property {string} school
- * @property {string} degree
- * @property {number} credits
- * @property {string} overview
- */
+type ProgramInfo = {
+	imageURL: string,
+	title: string,
+	type: 'major' | 'minor' | 'certificate',
+	shortDescription: string,
+	url: string,
+	code: string,
+	heroURL?: string,
+	description?: string,
+	college?: string,
+	school?: string,
+	degree?: string,
+	credits?: number,
+	overview?: string
+};
 
-/**
- * @type {ProgramInfo[]}
- */
-let programs = [];
+let programs: ProgramInfo[] = [];
 
-/**
- * @param {cheerio.Cheerio} elm
- * @returns {string}
- */
-function extractImageURL(elm) {
+function extractImageURL(elm: cheerio.Cheerio<cheerio.Element>): string {
 	if (!elm) {
 		return null;
 	}
@@ -82,10 +73,16 @@ function extractImageURL(elm) {
 			code = basename((new URL(url)).pathname);
 		}
 
+		const type = $('span.type', elm).text().trim();
+
+		if (type != 'major' && type != 'minor' && type != 'certificate') {
+			throw new Error("Invalid program type");
+		}
+
 		programs.push({
 			imageURL: (imgURL !== null) ? (new URL(imgURL, programListURL)).href : null,
 			title: $('span.title', elm).text().trim(),
-			type: $('span.type', elm).text().trim(),
+			type,
 			shortDescription: description,
 			url,
 			code,
@@ -93,10 +90,7 @@ function extractImageURL(elm) {
 	});
 }
 
-/**
- * @param {ProgramInfo} program
- */
-async function processProgram(program) {
+async function processProgram(program: ProgramInfo) {
 	console.log(`Fetching additional information for ${program.title} (${program.type})`);
 
 	const response = await fetch(program.url);

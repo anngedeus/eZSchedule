@@ -1,0 +1,32 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug course scraper",
+			"program": "${workspaceFolder}/backend/build/scripts/course-scraper.js",
+			"cwd": "${workspaceFolder}/backend",
+			"request": "launch",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"type": "node"
+		},
+		{
+			"name": "Launch backend tests via NPM",
+			"request": "launch",
+			"runtimeArgs": [
+				"run-script",
+				"test"
+			],
+			"runtimeExecutable": "npm",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"cwd": "${workspaceFolder}/backend",
+			"type": "node"
+		}
+	]
+}

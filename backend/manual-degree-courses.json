@@ -1,0 +1,219 @@
+[
+	{
+		"code": "CPS_BSCS",
+		"criticalTracking": {
+			"semesters": 5,
+			"courses": [
+				"MAC2311",
+				"MAC2312",
+				"MAC2313",
+				"PHY2048",
+				"PHY2049",
+				"COP3502C"
+			]
+		},
+		"otherRequiredCourses": [
+			"MAS3114",
+			"STA3032",
+			"PHY2048L",
+			"PHY2049L",
+			"ENC3246",
+			"COP3503C",
+			"COT3100",
+			"COP3530",
+			"CDA3101",
+			"CEN3031",
+			"CIS4301",
+			"COP4600",
+			"COP4020",
+			"COP4533",
+			"CNT4007",
+			["CIS4914", "EGN4952"],
+			["EGS4034", "CGS3065"]
+		],
+		"otherRequirements": [
+			{
+				"credits": 14,
+				"includedCourses": [
+					{
+						"levelMin": 3000
+					}
+				],
+				"excludedCourses": [
+					{
+						"prefix": "CAP",
+						"level": 4000
+					},
+					{
+						"prefix": "CDA",
+						"level": 4000
+					},
+					{
+						"prefix": "CEN",
+						"level": 4000
+					},
+					{
+						"prefix": "CIS",
+						"level": 4000
+					},
+					{
+						"prefix": "COP",
+						"level": 4000
+					},
+					{
+						"prefix": "COT",
+						"level": 4000
+					},
+					"CGS3065",
+					"EIN4354",
+					"EGN4951"
+				],
+				"comment": "TODO: Courses must be in the same \"area\" (I guess field?)"
+			},
+			{
+				"credits": 18,
+				"includedCourses": [
+					{
+						"prefix": "CAP",
+						"level": 4000
+					},
+					{
+						"prefix": "CDA",
+						"level": 4000
+					},
+					{
+						"prefix": "CEN",
+						"level": 4000
+					},
+					{
+						"prefix": "CIS",
+						"level": 4000
+					},
+					{
+						"prefix": "COP",
+						"level": 4000
+					},
+					{
+						"prefix": "COT",
+						"level": 4000
+					},
+					"CGS3065",
+					"EIN4354",
+					"EGN4951"
+				],
+				"onlyIncluded": true
+			}
+		]
+	},
+	{
+		"code": "CPE_BSCE",
+		"criticalTracking": {
+			"semesters": 5,
+			"courses": [
+				["CHM2045", "CHM2095"],
+				"MAC2311",
+				"MAC2312",
+				"MAC2313",
+				"MAP2302",
+				"PHY2048",
+				"PHY2049"
+			]
+		},
+		"otherRequiredCourses": [
+			"MAS3114",
+			"STA3032",
+			"PHY2048L",
+			"PHY2049L",
+			"ENC3246",
+			"COP3503C",
+			"COT3100",
+			"COP3530",
+			"CDA3101",
+			"CEN3031",
+			"CIS4301",
+			"COP4600",
+			"COP4020",
+			"ENC3246",
+			"EEL3701C",
+			"EEL3135",
+			"EEL3701C",
+			"EEL3744C",
+			"EEL4712C",
+			["CEN3907C", "EGN4951"],
+			["CEN3908C", "EGN4952"]
+		],
+		"otherRequirements": [
+			{
+				"credits": 14,
+				"includedCourses": [
+					{
+						"levelMin": 3000
+					}
+				],
+				"excludedCourses": [
+					{
+						"prefix": "CAP",
+						"level": 4000
+					},
+					{
+						"prefix": "CDA",
+						"level": 4000
+					},
+					{
+						"prefix": "CEN",
+						"level": 4000
+					},
+					{
+						"prefix": "CIS",
+						"level": 4000
+					},
+					{
+						"prefix": "COP",
+						"level": 4000
+					},
+					{
+						"prefix": "COT",
+						"level": 4000
+					},
+					"CGS3065",
+					"EIN4354",
+					"EGN4951"
+				],
+				"comment": "TODO: Courses must be in the same \"area\" (I guess field?)"
+			},
+			{
+				"credits": 18,
+				"includedCourses": [
+					{
+						"prefix": "CAP",
+						"level": 4000
+					},
+					{
+						"prefix": "CDA",
+						"level": 4000
+					},
+					{
+						"prefix": "CEN",
+						"level": 4000
+					},
+					{
+						"prefix": "CIS",
+						"level": 4000
+					},
+					{
+						"prefix": "COP",
+						"level": 4000
+					},
+					{
+						"prefix": "COT",
+						"level": 4000
+					},
+					"CGS3065",
+					"EIN4354",
+					"EGN4951"
+				],
+				"onlyIncluded": true
+			}
+		]
+	}
+]
