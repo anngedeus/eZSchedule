@@ -1,15 +1,26 @@
-import logo from './logo.svg';
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import React from 'react';
+import NavBar from './components/NavBar';
+import Welcome from './components/Welcome';
+import Login from './components/Login';
+import Landing from './components/landing/Landing';
 import './App.css';
-import Landing from './components/Landing.js'
 
 function App() {
+  
   return (
-    <div className="App">
-      <header>
-        A 21 Savage LLC production.
-      </header>
-      <Landing/>
+
+    <div className='App'>
+    <Router>
+      <NavBar/>
+      <div className='Sections'>
+        <Routes>
+          <Route path='/' element={<Welcome/>} exact="true"/>
+          <Route path='/Login' element={<Login/>}  />
+          <Route path='/Landing' element={<Landing/>} />
+        </Routes>
+      </div>
+    </Router>
     </div>
   );
 }
