@@ -4,7 +4,8 @@ import fetch from 'node-fetch';
 import { existsSync } from 'fs';
 import { writeFile, readFile } from 'fs/promises';
 import { SingleBar, Presets } from 'cli-progress';
-import { parseRawPrerequisites, CourseEntry } from './lib/course-info.js';
+import { parseRawPrerequisites } from './lib/course-info.js';
+import { CourseInfo } from '../lib/json-types.js';
 
 const outputFile = 'course-info.json';
 const cacheFile = 'raw-course-info-cache.json';
@@ -29,13 +30,6 @@ type ResponseEntry = {
 	RETRIEVEDROWS: number,
 	TOTALROWS: number,
 	COURSES: CourseResponseEntry[],
-};
-
-type CourseInfo = {
-	code: string,
-	term: string,
-	prerequisites: CourseEntry,
-	corequisites: CourseEntry,
 };
 
 let courses: CourseInfo[] = [];
