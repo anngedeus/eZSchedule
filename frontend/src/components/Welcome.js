@@ -12,7 +12,7 @@ const UseStyles = makeStyles((theme) => ({
 
     design: {
         marginLeft: theme.spacing(-50),
-        marginBottom: theme.spacing(-90),
+        marginBottom: theme.spacing(-60),
         width: '150%',
         height: '150%',
     },
@@ -43,7 +43,7 @@ export default function Welcome() {
            <Typography className={classes.welcomeMessage}>
                 <span style={{color: '#9695F0'}}>Welcome!</span> to your very own <br/>eZ Schedule
            </Typography>
-           <Toolbar>
+           <Toolbar xs={12} sm={6}>
                <img src={webdesign} alt="" className={classes.design}/>
            </Toolbar>
        </Container>
