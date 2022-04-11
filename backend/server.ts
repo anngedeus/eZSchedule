@@ -107,6 +107,8 @@ app.get('/api/course-history', authenticateUser, courseHistoryGetHandler);
 app.post('/api/course-history', authenticateUser, courseHistoryAddHandler);
 app.delete('/api/course-history', authenticateUser, courseHistoryDeleteHandler);
 
+app.use(express.static('../frontend/build'));
+
 app.listen(port, () => {
 	console.log(`Server is running on port: ${port}`);
 });
