@@ -1,4 +1,5 @@
 import balanced from 'balanced-match';
+import { CourseEntry, CourseRequirementsInfo } from '../../lib/json-types.js';
 
 const prereqRegex = /Prereq:\s*((.(?![A-Za-z]+:))*)/;
 const coreqRegex = /Coreq:\s*((.(?![A-Za-z]+:))*)/;
@@ -8,19 +9,6 @@ const keepRegex = /\{[0-9]+\}|and|AND|or|OR/g;
 const indexRegex = /\{([0-9]+)\}/;
 
 // UF, why the hell can't you provide simple, parseable course dependency information?!
-
-export type CourseCode = string;
-export type CourseIntersection = {
-	intersection: CourseEntry[],
-};
-export type CourseUnion = {
-	union: CourseEntry[],
-};
-export type CourseEntry = CourseCode | CourseIntersection | CourseUnion;
-export type CourseRequirementsInfo = {
-	prerequisites: CourseEntry,
-	corequisites: CourseEntry,
-};
 
 export function parseRawPrerequisites(raw: string): CourseRequirementsInfo {
 	if (!raw) {
