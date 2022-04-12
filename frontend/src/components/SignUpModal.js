@@ -1,6 +1,5 @@
 import React from 'react'
 import { Grid, Paper, Typography, TextField, Button, makeStyles, InputAdornment } from '@material-ui/core'
-import FormControl from '@material-ui/core/FormControl';
 import { NavLink } from 'react-router-dom'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
@@ -45,13 +44,14 @@ export default function SignUp() {
         },
         headerStyle: {
             margin: 0,
-            marginTop: 15
+            marginTop: 15,
+            fontFamily: 'Arvo'
         },
         marginTop: {
             marginTop: 5
         },
         linkcustom: {
-            fontFamily: "Arvo",
+            fontFamily: 'Callie Chalk Font',
             fontSize: "40px",
             textDecoration: "none",
             color: "black",
@@ -68,12 +68,12 @@ export default function SignUp() {
         <Paper elevation={20} className={classes.paperStyle}>
             <Grid align='center'>
                 <div>
-                    <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#FEDB74', justifyContent: 'center'}}>
+                    <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
                         eZ Schedule.
                     </NavLink>
                  </div>
                 <h2 className={classes.headerStyle}>Sign Up</h2>
-                <Typography variant='caption' gutterBottom>Please fill this form to create an account!</Typography>
+                <Typography variant='caption' gutterBottom style={{fontFamily: 'Arvo'}}>Please fill this form to create an account!</Typography>
             </Grid>
             <form id='reg-form'>
                 <TextField fullWidth id="name" 
