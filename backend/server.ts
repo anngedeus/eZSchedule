@@ -12,6 +12,7 @@ config();
 const app = express();
 const port = process.env.PORT || 4000;
 
+
 app.use(cors());
 app.use(express.json());
 
@@ -20,6 +21,12 @@ await mongoose.connect(uri);
 console.log("MongoDB database connection established successfully");
 
 // TODO: authentication
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+app.post('/api/register', async (req, res) => {
+	console.log(req.body)
+	res.json({status: 'ok'})
+})
 
 app.post('/api/create-user', createUserHandler);
 app.get('/api/course-history/:userID', courseHistoryGetHandler);
