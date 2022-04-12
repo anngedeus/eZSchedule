@@ -20,10 +20,10 @@ import { ListItem } from '@material-ui/core';
 const UseStyles = makeStyles((theme) => ({
 
     appBar: {
+        // background: "#ECECFF",
         background: "white",
     },
     linkcustom: {
-        fontFamily: "Arvo",
         textDecoration: "none",
         color: "black",
         marginLeft: theme.spacing(15),
@@ -35,7 +35,7 @@ const UseStyles = makeStyles((theme) => ({
     nameLarge: {
         color: "black",
         fontSize: "20px",
-        fontFamily: "Shadows Into Light",
+        fontFamily: 'Callie Chalk Font',
         fontWeight: "bolder",
         marginLeft: theme.spacing(15),
         flexGrow: "1",
@@ -47,7 +47,7 @@ const UseStyles = makeStyles((theme) => ({
     nameSmall: {
         color: "black",
         fontSize: "15px",
-        fontFamily: "Shadows Into Light",
+        fontFamily: 'Callie Chalk Font',
         fontWeight: "bolder",
         display: "block",
         flexGrow: "1",
@@ -69,24 +69,24 @@ export default function NavBar() {
     const [open, setOpen] = useState(false)
 
     return (
-        <AppBar className={classes.appBar} elevation={1} position='fixed' top='0'>
+        <AppBar className={classes.appBar} elevation={2} position='fixed' top='0'>
         <Toolbar>
             <Typography className={classes.nameLarge}>
-                <div><NavLink to="/" exact  className={classes.linkcustom} style={{marginLeft: -50, color: '#FEDB74'}}>eZ Schedule.</NavLink></div>
+                <div><NavLink to="/" exact  className={classes.linkcustom} style={{marginLeft: -50, color: '#F5BB10'}}>eZ Schedule.</NavLink></div>
             </Typography>
             <Typography className={classes.nameSmall}>
-                <div><NavLink to="/" exact  className={classes.linkcustom} style={{color: '#FEDB74'}}>eZ Schedule.</NavLink></div>
+                <div><NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10'}}>eZ Schedule.</NavLink></div>
             </Typography>
             <Typography>
                 <Hidden smDown>
                     <div className={classes.navlinks}>
-                        <NavLink to="/" exact className={classes.linkcustom} fontSize="15px">
+                        <NavLink to="/" exact className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }}>
                             Home
                         </NavLink>
-                        <NavLink to="/Login" className={classes.linkcustom} fontSize="15px">
+                        <NavLink to="/Login" className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }}>
                             Login
                         </NavLink>
-                        <NavLink to="/Landing" className={classes.linkcustom} fontSize="15px">
+                        <NavLink to="/Landing" className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }}>
                             Landing(Temp)
                         </NavLink>
                     </div>
