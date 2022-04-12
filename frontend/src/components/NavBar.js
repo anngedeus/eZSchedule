@@ -71,13 +71,13 @@ export default function NavBar() {
     return (
         <AppBar className={classes.appBar} elevation={2} position='fixed' top='0'>
         <Toolbar>
-            <Typography className={classes.nameLarge}>
+            <Typography component={'div'} className={classes.nameLarge}>
                 <div><NavLink to="/" exact  className={classes.linkcustom} style={{marginLeft: -50, color: '#F5BB10'}}>eZ Schedule.</NavLink></div>
             </Typography>
-            <Typography className={classes.nameSmall}>
+            <Typography component={'div'} className={classes.nameSmall}>
                 <div><NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10'}}>eZ Schedule.</NavLink></div>
             </Typography>
-            <Typography>
+            <Typography component={'div'}>
                 <Hidden smDown>
                     <div className={classes.navlinks}>
                         <NavLink to="/" exact className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }}>

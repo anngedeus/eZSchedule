@@ -1,5 +1,6 @@
-import { parseRawPrerequisites, CourseRequirementsInfo } from '../scripts/lib/course-info.js';
+import { parseRawPrerequisites } from '../scripts/lib/course-info.js';
 import { readFileSync } from 'fs';
+import { CourseRequirementsInfo } from '../lib/json-types.js';
 
 const data = JSON.parse(readFileSync(new URL('./course-info-test-data.json', import.meta.url), 'utf8'));
 

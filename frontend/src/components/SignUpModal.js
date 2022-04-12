@@ -1,40 +1,51 @@
 import React from 'react'
 import { Grid, Paper, Typography, TextField, Button, makeStyles, InputAdornment } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
+import lscache from 'lscache';
+import { Alert } from '@mui/material';
 
+export default React.forwardRef((props, ref) => {
+    const navigate = useNavigate();
 
-export default function SignUp() {
+    const [failureMessage, setFailureMessage] = React.useState('');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('#reg-form')
-        const submit = document.querySelector('submit')
-        form.addEventListener(submit, registerUser)
+    async function registerUser(event) {
+        event.preventDefault();
+        const name = document.querySelector('#name').value
+        const email = document.querySelector('#email').value
+        const password = document.querySelector('#password').value
 
-        async function registerUser(event) {
-            event.preventDefault();
-            const name = document.querySelector('#name').value
-            const email = document.querySelector('#email').value
-            const password = document.querySelector('#password').value
-    
-            const result = await fetch('/api/register', {
+        try {
+            const result = await fetch('/api/create-user', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify ({
+                body: JSON.stringify({
                     name,
                     email,
-                    password     
-                }).then((res) => res.json())
-            })
-    
-            console.log(result)
-    
+                    password,
+                }),
+            });
+
+            const response = await result.json();
+
+            if (response.error != 0) {
+                setFailureMessage('Account with that email already exists');
+            } else {
+                setFailureMessage('');
+
+                lscache.set('token', response.token, 1440 /* minutes */);
+
+                navigate('/Landing', { replace: true });
+            }
+        } catch (e) {
+
         }
-    });
+    }
 
     const UseStyles = makeStyles((theme) => ({
         paperStyle: {
@@ -64,8 +75,7 @@ export default function SignUp() {
 
     return (  
         
-        <Grid>
-        <Paper elevation={20} className={classes.paperStyle}>
+        <Paper elevation={0} className={classes.paperStyle}>
             <Grid align='center'>
                 <div>
                     <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
@@ -103,11 +113,11 @@ export default function SignUp() {
                 InputProps={{startAdornment: <InputAdornment position="start">
                 <LockIcon/></InputAdornment>}}          
                 />
-                <Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Create Account</Button>
+                { failureMessage.length > 0 && <Alert severity="error" style={{ marginTop: 25 }}>{failureMessage}</Alert> }
+                <Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary' onClick={registerUser}>Create Account</Button>
             </form>
         </Paper>
-    </Grid>
      
     )
     
-}
+})
