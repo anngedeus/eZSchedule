@@ -20,7 +20,7 @@ import { ListItem } from '@material-ui/core';
 const UseStyles = makeStyles((theme) => ({
 
     appBar: {
-        background: "white",
+        background: "#ECECFF",
     },
     linkcustom: {
         fontFamily: "Arvo",
@@ -69,7 +69,7 @@ export default function NavBar() {
     const [open, setOpen] = useState(false)
 
     return (
-        <AppBar className={classes.appBar} elevation={1} position='fixed' top='0'>
+        <AppBar className={classes.appBar} elevation={2} position='fixed' top='0'>
         <Toolbar>
             <Typography className={classes.nameLarge}>
                 <div><NavLink to="/" exact  className={classes.linkcustom} style={{marginLeft: -50, color: '#FEDB74'}}>eZ Schedule.</NavLink></div>

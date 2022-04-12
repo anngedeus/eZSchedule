@@ -9,6 +9,6 @@
   width: 100%;
   height: calc(100vh - 64x);
   background-color: white;
-  position: relative;
+  position: absolute;
   top: 64px;
 }

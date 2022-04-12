@@ -4,7 +4,7 @@ import loginImage from '../media/ufcampus1.jpeg'
 import { InputAdornment, makeStyles } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 import { TextField, Button } from '@material-ui/core'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import Modal from '@mui/material/Modal';
 import SignUpModal from './SignUpModal'
@@ -63,7 +63,7 @@ export default function Login() {
                         </Grid>
                         <TextField label="Email" margin="normal" 
                         InputProps={{startAdornment:<InputAdornment position="start">
-                            <AccountCircleIcon/></InputAdornment>}} 
+                            <EmailIcon/></InputAdornment>}} 
                         />
                         <TextField label="Password" margin="normal" type="password" 
                         InputProps={{startAdornment: <InputAdornment position="start">
@@ -75,11 +75,8 @@ export default function Login() {
                             </Button>
                         <div style={{height: 20}} />
                         <Typography>Don't have an account?
-                        {/* <Button component={NavLink} to="/SignUp" variant="text" style={{fontWeight: 'bold'}}> 
-                                Sign Up
-                        </Button>                         */}
                         <Button onClick={handleOpen} variant="text" style={{fontWeight: 'bold'}}>Sign Up Here!</Button>
-                            <Modal open={open} onClose={handleClose}>                             
+                            <Modal open={open} onClose={handleClose} style={{marginTop: 100}}>                             
                                 <SignUpModal/>                                
                             </Modal>
                         </Typography>
