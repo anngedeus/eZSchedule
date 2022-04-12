@@ -1,7 +1,9 @@
 import React from 'react'
-import { Grid, Paper, Typography, TextField, Button, makeStyles } from '@material-ui/core'
-import FormControl from '@material-ui/core/FormControl';
+import { Grid, Paper, Typography, TextField, Button, makeStyles, InputAdornment } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import EmailIcon from '@mui/icons-material/Email';
 
 
 export default function SignUp() {
@@ -42,16 +44,14 @@ export default function SignUp() {
         },
         headerStyle: {
             margin: 0,
-            marginTop: 15
-        },
-        avatarStyle: {
-            backgroundColor: '#1bbd7e'
+            marginTop: 15,
+            fontFamily: 'Arvo'
         },
         marginTop: {
             marginTop: 5
         },
         linkcustom: {
-            fontFamily: "Arvo",
+            fontFamily: 'Callie Chalk Font',
             fontSize: "40px",
             textDecoration: "none",
             color: "black",
@@ -68,19 +68,41 @@ export default function SignUp() {
         <Paper elevation={20} className={classes.paperStyle}>
             <Grid align='center'>
                 <div>
-                    <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#FEDB74', justifyContent: 'center'}}>
+                    <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
                         eZ Schedule.
                     </NavLink>
                  </div>
                 <h2 className={classes.headerStyle}>Sign Up</h2>
-                <Typography variant='caption' gutterBottom>Please fill this form to create an account!</Typography>
+                <Typography variant='caption' gutterBottom style={{fontFamily: 'Arvo'}}>Please fill this form to create an account!</Typography>
             </Grid>
             <form id='reg-form'>
-                <TextField fullWidth id="name" label='Name' placeholder="Enter your name" />
-                <TextField fullWidth id="email" label='Email' placeholder="Enter your email" />
-                <FormControl component="fieldset" className={classes.marginTop}></FormControl>
-                <TextField fullWidth id="password" label='Password' placeholder="Enter your password" type="password"/>
-                <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" type="password"/>
+                <TextField fullWidth id="name" 
+                label='Name' 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start">
+               <AccountCircleIcon/></InputAdornment>}}               
+                />
+                <TextField fullWidth id="email" 
+                label='Email' 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start">
+               <EmailIcon/></InputAdornment>}}          
+                />
+                {/* <FormControl component="fieldset" className={classes.marginTop}></FormControl> */}
+                <TextField fullWidth id="password" 
+                label='Password'
+                type="password" 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start">
+                <LockIcon/></InputAdornment>}}                         
+                />
+                <TextField fullWidth 
+                label='Confirm Password' 
+                type="password" 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start">
+                <LockIcon/></InputAdornment>}}          
+                />
                 <Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Create Account</Button>
             </form>
         </Paper>
