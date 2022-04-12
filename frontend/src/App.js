@@ -22,7 +22,7 @@ function App() {
       <NavBar/>
       <div className='Sections'>
         <Routes>
-          <Route path='/' element={<Welcome/>} exact="true"/>
+          <Route path='/' element={<Welcome/>} exact/>
           <Route path='/Login' element={<Login/>}  />
           <Route path='/Landing' element={<Landing/>} />
           <Route path='/SignUp' element={<SignUp/>} />
