@@ -51,17 +51,81 @@
     return sorted;
   }
 
+  //if major is CS
+  export function generateCS(){
+    var csPrereqs = [
+      ["MAC2311", "MAC2312"],
+      ["MAC2312", "MAC2313"],
+      ["MAC2311", "COP3503"],
+      ["COP3502", "COP3503"],
+      ["COP4600", "CNT4007"],
+      ["COP3530", "COP4600"],
+      ["COP3503", "COP3530"],
+      ["COP3530", "CEN3031"],
+      ["MAC2312", "MAS3114"],
+      ["MAC2311", "STA3032"],
+      ["PHY2048", "PHY2049"],
+      ["MAC2311", "COT3100"],
+      ["COT3100", "COP3530"],
+      ["MAC2312", "COP3530"],
+      ["COP3503", "CDA3101"],
+      ["COT3100", "CDA3101"],
+      ["CDA3101", "COP4600"],
+      ["COP3503", "CIS4301"],
+      ["COT3100", "CIS4301"],
+      ["COP3503", "EEL3701"]
+    ]
+
+    var sorted = tsort(csPrereqs);
+    console.log("Here's your CS course order:", sorted);
+  }
+  //if major is CE
+  export function generateCE(){
+    var cePrereqs = [
+      ["MAC2311", "MAC2312"],
+      ["MAC2312", "MAC2313"],
+      ["MAC2311", "MAP2302"],
+      ["MAC2311", "COP3503"],
+      ["COP3502", "COP3503"],
+      ["COP4600", "CNT4007"],
+      ["CHM2045", "CHM2046"],
+      ["PHY2049", "EEL3111"],
+      ["MAC2312", "EEL3135"],
+      ["MAC2313", "EEL3111"],
+      ["EEL3701", "EEL3744"],
+      ["EEL3701", "EEL4712"],
+      ["COP3530", "COP4600"],
+      ["COP3503", "COP3530"],
+      ["COP3530", "CEN3031"],
+      ["MAC2312", "MAS3114"],
+      ["MAC2311", "STA3032"],
+      ["PHY2048", "PHY2049"],
+      ["MAC2311", "COT3100"],
+      ["COT3100", "COP3530"],
+      ["MAC2312", "COP3530"],
+      ["COP3503", "CDA3101"],
+      ["COT3100", "CDA3101"],
+      ["CDA3101", "COP4600"],
+      ["COP3503", "EEL3701"]
+    ]
+
+    var sorted = tsort(cePrereqs);
+    console.log("Here's your CE course order:", sorted);
+  }
+
+
+  //testing the top sort with numbers / letters
   function tsortTest() {
   
     // example 1: success
-    var edges = [
+    var courses = [
       [1, 2],
       [1, 3],
       [2, 4],
       [3, 4]
     ];
   
-    var sorted = tsort(edges);
+    var sorted = tsort(courses);
     console.log(sorted);
   
     // example 2: failure ( A > B > C > A )
@@ -73,6 +137,7 @@
   
     try {
       sorted = tsort(edges);
+      console.log("Success! ", sorted);
     }
     catch (e) {
       console.log(e.message);
