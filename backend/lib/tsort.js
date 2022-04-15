@@ -50,3 +50,31 @@
   
     return sorted;
   }
+
+  function tsortTest() {
+  
+    // example 1: success
+    var edges = [
+      [1, 2],
+      [1, 3],
+      [2, 4],
+      [3, 4]
+    ];
+  
+    var sorted = tsort(edges);
+    console.log(sorted);
+  
+    // example 2: failure ( A > B > C > A )
+    edges = [
+      ['A', 'B'],
+      ['B', 'C'],
+      ['C', 'A']
+    ];
+  
+    try {
+      sorted = tsort(edges);
+    }
+    catch (e) {
+      console.log(e.message);
+    }
+  }
