@@ -1,17 +1,18 @@
 import React from 'react'
 import { Dialog, Grid, Typography, Alert } from '@mui/material'
 import { InputAdornment, makeStyles, Paper } from '@material-ui/core'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom'
 import { TextField, Button } from '@material-ui/core'
 import EmailIcon from '@mui/icons-material/Email'
 import LockIcon from '@mui/icons-material/Lock'
-import Modal from '@mui/material/Modal'
 import SignUpModal from './SignUpModal'
 import loginImage from '../media/books1.webp'
 import lscache from 'lscache';
+import { useUser } from './User';
 
 export default React.forwardRef((props, ref) => {
     const navigate = useNavigate();
+    const user = useUser();
 
     const UseStyles = makeStyles((theme) => ({
         linkcustom: {
@@ -37,7 +38,9 @@ export default React.forwardRef((props, ref) => {
 
     const [invalidLogin, setInvalidLogin] = React.useState(false);
 
-    const handleLogIn = async () => {
+    const handleLogIn = async (event) => {
+        event.preventDefault();
+
         const email = document.querySelector('#login-email').value;
         const password = document.querySelector('#login-password').value;
 
@@ -55,14 +58,16 @@ export default React.forwardRef((props, ref) => {
 
             const response = await result.json();
 
-            if (response.error != 0) {
+            if (response.error !== 0) {
                 setInvalidLogin(true);
             } else {
                 setInvalidLogin(false);
 
                 lscache.set('token', response.token, 1440 /* minutes */);
+                lscache.set('name', 'Test User'); // TODO: we need to store and retrieve this in the backend
+                user.updateUser(response.token, 'Test User');
 
-                navigate('/Landing', { replace: true });
+                navigate('/', { replace: true });
             }
         } catch (e) {
             setInvalidLogin(true);
@@ -71,6 +76,7 @@ export default React.forwardRef((props, ref) => {
 
     return (
         <div {...props} ref={ref}>
+            { user.loggedIn && <Navigate to="/" replace/> }
             <Grid container style={{minHeight: '100vh', overflow: 'hidden'}} >
                 <Grid item xs={12} sm={6}>
                     <img src={loginImage} style={{width: '100%', height: '100vh', objectFit: 'cover'}} alt=""/>
@@ -84,23 +90,23 @@ export default React.forwardRef((props, ref) => {
                     <Paper elevation={20} className={classes.paperStyle}>
                         <div style={{display: 'flex', flexDirection: 'column', maxWidth: 400, minWidth: 300}}>
                             <Grid container justify="center">
-                                <div><NavLink to="/" exact  className={classes.linkcustom} style={{color: '#F5BB10'}}>
+                                <div><NavLink to="/" className={classes.linkcustom} style={{color: '#F5BB10'}}>
                                     eZ Schedule.</NavLink>
                                 </div>
                             </Grid>
-                            <TextField label="Email" margin="normal" id="login-email"
-                            InputProps={{startAdornment:<InputAdornment position="start">
-                                <EmailIcon/></InputAdornment>}} 
-                            />
-                            <TextField label="Password" margin="normal" type="password" id="login-password"
-                            InputProps={{startAdornment: <InputAdornment position="start" >
-                                <LockIcon/></InputAdornment>}}
-                            />
-                            <div style={{height: 20}} />
-                            { invalidLogin && <Alert severity="error" style={{ marginBottom: 20 }}>Invalid username/password</Alert> }
-                            <Button color="secondary" variant="contained" onClick={handleLogIn}>
-                                Log In
-                            </Button>
+                            <form id="login-form" onSubmit={handleLogIn}>
+                                <TextField label="Email" margin="normal" id="login-email"
+                                InputProps={{startAdornment:<InputAdornment position="start"><EmailIcon/></InputAdornment>}}
+                                />
+                                <TextField label="Password" margin="normal" type="password" id="login-password"
+                                InputProps={{startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}}
+                                />
+                                <div style={{height: 20}} />
+                                { invalidLogin && <Alert severity="error" style={{ marginBottom: 20 }}>Invalid username/password</Alert> }
+                                <Button color="secondary" variant="contained" type='submit'>
+                                    Log In
+                                </Button>
+                            </form>
                             <div style={{height: 20}} />
                             <Typography component={'div'} style={{ fontFamily: 'Arvo', fontSize: '14px'}}>Don't have an account?
                                 <Button onClick={handleOpen} variant="text" style={{fontWeight: 'bold', fontFamily: 'Arvo',  fontSize: '14px'}}>
