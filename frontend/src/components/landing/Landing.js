@@ -2,22 +2,77 @@ import {RaisedButton} from './button'
 import {Choices, Header} from './components' //will this work?
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { Button } from '@material-ui/core';
+import { Grid, Paper, Typography, makeStyles} from '@material-ui/core'
 import {useState} from 'react';
-import './Landing.css';
 import { useUser } from '../User';
 import { Navigate } from 'react-router-dom';
 
 export default function Landing() {
 	const user = useUser();
-	const [textInput, setTextInput] = useState(''); //data of text field stored in the state textInput
+	
+	
+	const [major, setMajor] = useState('');
+	const [course, setCourse] = useState('');
 
-	const handleInputChange = event => {
-		setTextInput(event.target.value);
-	};
+	const handleCourse = (e) => {
+		e.preventDefault()
+		console.log(course)
+	}
+	const handleMajor = (e) => {
+		e.preventDefault()	
+		console.log(major)
+	}
+
+	const useStyles = makeStyles((theme) => ({
+		
+		field: {
+			marginTop: 20,
+			marginBottom: 20,
+			display: 'block'
+		},
+
+
+	}))
+
+	const classes = useStyles();
 
 	return (
 		<>
 			{ !user.loggedIn && <Navigate to="/Login" replace /> }
+
+			<Paper>
+			   <form noValidate autoComplete="off" onSubmit={handleMajor}>
+			   <TextField
+			   		onChange={(e) => setMajor(e.target.value)}
+					label="Major"
+					variant="standard"
+					required
+					className={classes.field}
+				/>
+					<Button  
+					type="submit"
+					color="secondary"
+					variant="contained">
+						submit
+					</Button>		
+			   </form>
+			   <form noValidate autoComplete="off" onSubmit={handleCourse}>
+				<TextField
+					onChange={(e) => setCourse(e.target.value)}
+					label="Courses"
+					variant="standard"
+					required
+					className={classes.field}
+				/>
+					<Button  
+					type="submit"
+					color="secondary"
+					variant="contained">
+						submit
+					</Button>		
+			    </form>			
+			</Paper>
 			<Header>
 				<h1>Welcome to the eZ Scheduler!</h1>
 				<h2>I don't know anything about you. Let's find that out, shall we?</h2>
@@ -40,7 +95,6 @@ export default function Landing() {
 						<TextField id="outlined-required" label="Major" style={{width: '40%', position: 'absolute', left: '29%', top: '350px'}} />
 						</div>
 						<div>
-						<TextField id="outlined-required" label="Course" onChange={handleInputChange} style={{ width: '40%', position: 'absolute', left: '29%', top: '450px'}} />
 						</div>
 					</Box>
 				</Choices>
