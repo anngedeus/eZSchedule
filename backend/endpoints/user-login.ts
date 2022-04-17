@@ -1,20 +1,21 @@
+import User, { generateTokenForID } from '../models/user.js';
 import express from 'express';
-import User from '../models/user.js';
 import APIError from '../lib/api-errors.js';
 import APIResponse from '../lib/api-response.js';
 
-interface CourseHistoryGetResponse extends APIResponse {
-	courses?: string[],
+interface UserLoginResponse extends APIResponse {
+	userID?: string,
+	token?: string,
 };
 
 export default async (req: express.Request, res: express.Response) => {
-	let resbody: CourseHistoryGetResponse = {
+	let resbody: UserLoginResponse = {
 		error: APIError.BadRequest,
 	};
 
 	try {
-		const result = await User.findById(req.user.id, 'completedCourses').exec();
-		resbody.courses = result.completedCourses;
+		resbody.userID = req.user.id;
+		resbody.token = await generateTokenForID(req.user.id);
 	} catch (e) {
 		res.status(400).json(resbody);
 		return;

@@ -14,5 +14,6 @@
 		"moduleTypes": {
 			"jest.config.ts": "cjs"
 		},
+		"files": true
 	}
 }

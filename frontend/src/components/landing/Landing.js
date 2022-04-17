@@ -1,4 +1,3 @@
-import react from 'react';
 import {RaisedButton} from './button'
 import {Choices, Header} from './components' //will this work?
 import Box from '@mui/material/Box';
@@ -41,6 +40,7 @@ export default function Landing() {
 	return (
 		<>
 			{ !user.loggedIn && <Navigate to="/Login" replace /> }
+
 			<Paper>
 			   <form noValidate autoComplete="off" onSubmit={handleMajor}>
 			   <TextField
@@ -73,6 +73,10 @@ export default function Landing() {
 					</Button>		
 			    </form>			
 			</Paper>
+			<Header>
+				<h1>Welcome to the eZ Scheduler!</h1>
+				<h2>I don't know anything about you. Let's find that out, shall we?</h2>
+			</Header>
 			<section style={{fontFamily: 'Courier new', fontSize: '15px'}}>
 				<p>We need to know:</p>
 				<ul>
@@ -91,11 +95,10 @@ export default function Landing() {
 						<TextField id="outlined-required" label="Major" style={{width: '40%', position: 'absolute', left: '29%', top: '350px'}} />
 						</div>
 						<div>
-						<TextField id="outlined-required" label="Course" style={{ width: '40%', position: 'absolute', left: '29%', top: '450px'}} />
 						</div>
 					</Box>
 				</Choices>
 			</section>
 		</>
-	)
+	);
 }
