@@ -41,8 +41,8 @@ export default React.forwardRef((props, ref) => {
                 setFailureMessage('');
 
                 lscache.set('token', response.token, 1440 /* minutes */);
-                lscache.set('name', 'Test User'); // TODO: we need to store and retrieve this in the backend
-                user.updateUser(response.token, 'Test User');
+                lscache.set('name', name);
+                user.updateUser(response.token, response.name, response.major);
 
                 navigate('/', { replace: true });
             }

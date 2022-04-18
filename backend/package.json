@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build": "tsc",
-    "start": "nodemon --exec \"node --loader ts-node/esm server.ts\"",
+    "start": "nodemon --exec \"node --loader ts-node/esm server.ts\" -e js,mjs,json,ts",
     "generate-degree-info": "node build/scripts/degree-scraper.js",
     "generate-course-info": "node build/scripts/course-scraper.js"
   },

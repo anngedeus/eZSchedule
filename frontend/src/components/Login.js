@@ -63,9 +63,14 @@ export default React.forwardRef((props, ref) => {
             } else {
                 setInvalidLogin(false);
 
+                console.log(response);
+
                 lscache.set('token', response.token, 1440 /* minutes */);
-                lscache.set('name', 'Test User'); // TODO: we need to store and retrieve this in the backend
-                user.updateUser(response.token, 'Test User');
+                lscache.set('name', response.name);
+                if (response.major) {
+                    lscache.set('major', response.major);
+                }
+                user.updateUser(response.token, response.name, response.major);
 
                 navigate('/', { replace: true });
             }

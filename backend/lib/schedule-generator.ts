@@ -1,8 +1,5 @@
-import { readFileSync } from 'fs';
-import { CourseCode, CourseFilter, CourseInfo, DegreeCourseInfo, MajorCode, Union } from './json-types.js';
-
-const courseInfo: CourseInfo[] = JSON.parse(readFileSync(new URL('../course-info.json', import.meta.url), 'utf8'));
-const manualDegreeCourses: DegreeCourseInfo[] = JSON.parse(readFileSync(new URL('../manual-degree-courses.json', import.meta.url), 'utf8'));
+import { CourseCode, CourseFilter, MajorCode, Union } from './json-types.js';
+import { courseInfo, manualDegreeCourses } from './data.js';
 
 // "weak" because we're actually cheating and not verifying the entries in the union
 function isUnionWeak<Entry>(obj: any): obj is Union<Entry> {

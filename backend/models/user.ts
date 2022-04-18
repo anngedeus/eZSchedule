@@ -28,6 +28,8 @@ export interface User {
 	password: string,
 	graduation?: string,
 	completedCourses: string[],
+	major?: string,
+	name: string,
 	generateToken: () => Promise<string>,
 };
 
@@ -51,6 +53,14 @@ const userSchema = new mongoose.Schema<User>({
 	},
 	completedCourses: {
 		type: Array (String),
+		required: true,
+	},
+	major: {
+		type: String,
+		required: false,
+	},
+	name: {
+		type: String,
 		required: true,
 	},
 });

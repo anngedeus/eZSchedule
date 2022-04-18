@@ -7,6 +7,7 @@ import APIResponse from '../lib/api-response.js';
 interface CreateUserRequest {
 	email: string,
 	password: string,
+	name: string,
 };
 
 namespace CreateUserRequest {
@@ -35,6 +36,7 @@ export default async (req: express.Request, res: express.Response) => {
 			email: req.body.email,
 			password: await hash(req.body.password, 10),
 			completedCourses: [],
+			name: req.body.name,
 		});
 		resbody.token = await user.generateToken();
 		resbody.userID = user.id;

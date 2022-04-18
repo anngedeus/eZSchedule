@@ -1,24 +1,20 @@
-import User, { generateTokenForID } from '../models/user.js';
 import express from 'express';
+import User from '../models/user.js';
 import APIError from '../lib/api-errors.js';
 import APIResponse from '../lib/api-response.js';
 
-interface UserLoginResponse extends APIResponse {
-	userID?: string,
-	token?: string,
+interface UserInfoGetResponse extends APIResponse {
 	name?: string,
 	major?: string,
 };
 
 export default async (req: express.Request, res: express.Response) => {
-	let resbody: UserLoginResponse = {
+	let resbody: UserInfoGetResponse = {
 		error: APIError.BadRequest,
 	};
 
 	try {
 		const result = await User.findById(req.user.id, 'major name').exec();
-		resbody.userID = req.user.id;
-		resbody.token = await generateTokenForID(req.user.id);
 		resbody.name = result.name;
 		resbody.major = (result.major) ? result.major : null;
 	} catch (e) {

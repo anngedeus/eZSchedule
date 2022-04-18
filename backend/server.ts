@@ -16,6 +16,10 @@ import courseHistoryAddHandler from './endpoints/course-history-add.js';
 import courseHistoryDeleteHandler from './endpoints/course-history-delete.js';
 import courseHistoryGetHandler from './endpoints/course-history-get.js';
 import userLoginHandler from './endpoints/user-login.js';
+import coursesHandler from './endpoints/courses.js';
+import majorsHandler from './endpoints/majors.js';
+import userInfoGetHandler from './endpoints/user-info-get.js';
+import userInfoSetHandler from './endpoints/user-info-set.js';
 
 config();
 
@@ -106,6 +110,10 @@ app.post('/api/user-login', loginUser, userLoginHandler);
 app.get('/api/course-history', authenticateUser, courseHistoryGetHandler);
 app.post('/api/course-history', authenticateUser, courseHistoryAddHandler);
 app.delete('/api/course-history', authenticateUser, courseHistoryDeleteHandler);
+app.get('/api/courses', coursesHandler);
+app.get('/api/majors', majorsHandler);
+app.get('/api/user-info', authenticateUser, userInfoGetHandler);
+app.put('/api/user-info', authenticateUser, userInfoSetHandler);
 
 app.use(express.static('../frontend/build'));
 

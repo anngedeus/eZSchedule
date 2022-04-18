@@ -1,6 +1,7 @@
 [
 	{
 		"code": "CPS_BSCS",
+		"name": "Computer Science",
 		"criticalTracking": {
 			"semesters": 5,
 			"courses": {
@@ -122,6 +123,7 @@
 	},
 	{
 		"code": "CPE_BSCE",
+		"name": "Computer Engineering",
 		"criticalTracking": {
 			"semesters": 5,
 			"courses": {

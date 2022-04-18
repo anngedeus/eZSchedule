@@ -8,8 +8,8 @@
 }
 .Sections {
   width: 100%;
-  height: calc(100vh - 64x);
+  height: calc(100vh - 64px);
   background-color: white;
-  position: absolute;
-  top: 64px;
+  padding-top: 64px;
+  position: relative;
 }
