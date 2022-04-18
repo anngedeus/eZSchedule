@@ -5,8 +5,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import lscache from 'lscache';
-import { Alert } from '@mui/material';
+import { Alert, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import { useUser } from './User';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default React.forwardRef((props, ref) => {
     const navigate = useNavigate();
@@ -78,18 +79,27 @@ export default React.forwardRef((props, ref) => {
     const classes = UseStyles();
 
     return (
-        <Paper elevation={0} className={classes.paperStyle}>
+        <form id='reg-form' onSubmit={registerUser} style={{height: '100%'}}>
             { user.loggedIn && <Navigate to="/" replace /> }
-            <Grid align='center'>
-                <div>
-                    <NavLink to="/" className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
-                        eZ Schedule.
-                    </NavLink>
-                 </div>
-                <h2 className={classes.headerStyle}>Sign Up</h2>
-                <Typography variant='caption' gutterBottom style={{fontFamily: 'Arvo'}}>Please fill this form to create an account!</Typography>
-            </Grid>
-            <form id='reg-form' onSubmit={registerUser}>
+            <DialogTitle>
+                <Grid container justifyContent="flex-end">
+                    <Grid item>
+                        <IconButton onClick={props.handleClose}>
+                            <CloseIcon/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            </DialogTitle>
+            <Paper elevation={0} className={classes.paperStyle} style={{marginTop: 0, paddingTop: 0, marginBottom: 0, paddingBottom: 0}}>
+                <Grid align='center'>
+                    <div>
+                        <NavLink to="/" className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
+                            eZ Schedule.
+                        </NavLink>
+                    </div>
+                    <h2 className={classes.headerStyle}>Sign Up</h2>
+                    <Typography variant='caption' gutterBottom style={{fontFamily: 'Arvo'}}>Please fill out this form to create an account!</Typography>
+                </Grid>
                 <TextField fullWidth id="name" 
                 label='Name' 
                 margin="normal"
@@ -113,8 +123,14 @@ export default React.forwardRef((props, ref) => {
                 InputProps={{startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}}
                 />
                 { failureMessage.length > 0 && <Alert severity="error" style={{ marginTop: 25 }}>{failureMessage}</Alert> }
-                <Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Create Account</Button>
-            </form>
-        </Paper>
+            </Paper>
+            <DialogActions sx={{paddingLeft: '20px', paddingRight: '20px', paddingBottom: '20px'}}>
+                <Grid container justifyContent="center" alignItems="center">
+                    <Grid item>
+                        <Button type='submit' variant='contained' color='secondary'>Create Account</Button>
+                    </Grid>
+                </Grid>
+            </DialogActions>
+        </form>
     )
 })

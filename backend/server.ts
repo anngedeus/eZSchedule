@@ -20,6 +20,7 @@ import coursesHandler from './endpoints/courses.js';
 import majorsHandler from './endpoints/majors.js';
 import userInfoGetHandler from './endpoints/user-info-get.js';
 import userInfoSetHandler from './endpoints/user-info-set.js';
+import scheduleHandler from './endpoints/schedule.js';
 
 config();
 
@@ -114,6 +115,7 @@ app.get('/api/courses', coursesHandler);
 app.get('/api/majors', majorsHandler);
 app.get('/api/user-info', authenticateUser, userInfoGetHandler);
 app.put('/api/user-info', authenticateUser, userInfoSetHandler);
+app.get('/api/schedule', authenticateUser, scheduleHandler);
 
 app.use(express.static('../frontend/build'));
 

@@ -77,7 +77,9 @@ export default function NavBar() {
         event.preventDefault();
 
         lscache.remove('token');
-        user.updateUser(null, null);
+        user.updateUser(null, null, null);
+
+        setOpen(false);
 
         navigate('/');
     };
@@ -95,12 +97,12 @@ export default function NavBar() {
             </ListItem>
     } else {
         bigLogInOrOutLink =
-            <NavLink to="/Login" className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }}>
+            <NavLink to="/Login" className={classes.linkcustom} style={{fontFamily: 'Arvo', fontSize: '15px' }} onClick={() => setOpen(false)}>
                 Login
             </NavLink>
         smallLogInOrOutLink =
             <ListItem>
-                <NavLink to="/Login" className={classes.linkcustom} fontSize="15px">
+                <NavLink to="/Login" className={classes.linkcustom} fontSize="15px" onClick={() => setOpen(false)}>
                     Login
                 </NavLink>
             </ListItem>
@@ -140,7 +142,7 @@ export default function NavBar() {
             <Divider />
             <List>
                 <ListItem>
-                    <NavLink to="/" className={classes.linkcustom} fontSize="15px">
+                    <NavLink to="/" className={classes.linkcustom} fontSize="15px" onClick={() => setOpen(false)}>
                         Home
                     </NavLink>
                 </ListItem>

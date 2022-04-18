@@ -5,9 +5,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {useEffect, useState} from 'react';
 import { useUser } from '../User';
 import { Navigate } from 'react-router-dom';
-import { Autocomplete, Grid, IconButton, List, ListItem, ListItemText} from '@mui/material';
+import { Autocomplete, CircularProgress, Grid, IconButton, List, ListItem, ListItemText, useMediaQuery} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import lscache from 'lscache';
+import { createTheme } from '@mui/system';
+
+const theme = createTheme();
 
 export default function Landing() {
 	const user = useUser();
@@ -17,22 +20,46 @@ export default function Landing() {
 	const [courseHistory, setCourseHistory] = useState([]);
 	const [targetCourse, setTargetCourse] = useState(null);
 	const [targetMajor, setTargetMajor] = useState(null);
+	const [schedule, setSchedule] = useState([]);
+	const [loadingSchedule, setLoadingSchedule] = useState(true);
+	const [loadingCourseHistory, setLoadingCourseHistory] = useState(true);
+	const [loadingMajors, setLoadingMajors] = useState(true);
+	const [loadingCourses, setLoadingCourses] = useState(true);
+	const [coursesOpen, setCoursesOpen] = useState(false);
 
-	useEffect(async () => {
-		const [majorsRes, coursesRes] = await Promise.allSettled([fetch('/api/majors'), fetch('/api/courses')]);
-		const [majorsResponse, coursesResponse] = await Promise.allSettled([ majorsRes.value.json(), coursesRes.value.json() ]);
-		setMajors(majorsResponse.value.majors);
-		setCourses(coursesResponse.value.courses);
+	const loadCourses = async () => {
+		const coursesRes = await fetch('/api/courses');
+		const coursesResponse = await coursesRes.json();
+		setCourses(coursesResponse.courses);
+		setLoadingCourses(false);
+	};
 
-		if (user.major) {
-			const target = majorsResponse.value.majors.find(obj => obj.code === user.major);
-			if (target) {
-				setTargetMajor(target.name);
-			}
+	useEffect(() => {
+		if (coursesOpen && loadingCourses) {
+			loadCourses();
 		}
+	}, [coursesOpen, loadingCourses]);
+
+	useEffect(() => {
+		(async () => {
+			const majorsRes = await fetch('/api/majors');
+			const majorsResponse = await majorsRes.json();
+			setMajors(majorsResponse.majors);
+
+			setLoadingMajors(false);
+
+			if (user.major) {
+				const target = majorsResponse.majors.find(obj => obj.code === user.major);
+				if (target) {
+					setTargetMajor(target.name);
+				}
+			}
+		})();
 	}, []);
 
-	const updateCourses = async () => {
+	const updateCourseHistory = async () => {
+		setLoadingCourseHistory(true);
+
 		const res = await fetch('/api/course-history', {
 			headers: {
 				'Authorization': 'Bearer ' + user.token,
@@ -40,10 +67,32 @@ export default function Landing() {
 		});
 		const response = await res.json();
 
+		setLoadingCourseHistory(false);
+
 		setCourseHistory(response.courses);
 	};
 
-	useEffect(updateCourses, []);
+	const updateSchedule = async () => {
+		setLoadingSchedule(true);
+
+		const res = await fetch('/api/schedule', {
+			headers: {
+				'Authorization': 'Bearer ' + user.token,
+			},
+		});
+		const response = await res.json();
+
+		setLoadingSchedule(false);
+
+		if (response.error === 0) {
+			setSchedule(response.schedule);
+		}
+	};
+
+	useEffect(() => {
+		updateCourseHistory();
+		updateSchedule();
+	}, []);
 
 	const useStyles = makeStyles((theme) => ({
 		
@@ -76,7 +125,10 @@ export default function Landing() {
 			fontFamily: 'Arvo', 
 			fontSize: '15px',
 			marginTop: 25,
-		}
+		},
+		input: {
+			display: "none",
+		},
 		
 
 	}))
@@ -102,6 +154,8 @@ export default function Landing() {
 
 		if (response.error === 0) {
 			lscache.set('major', major);
+
+			await updateSchedule();
 		}
 	};
 
@@ -122,7 +176,10 @@ export default function Landing() {
 
 		setTargetCourse(null);
 
-		await updateCourses();
+		await Promise.allSettled([
+			updateCourseHistory(),
+			updateSchedule(),
+		]);
 	};
 
 	const handleRemoveCourse = async (e, course) => {
@@ -138,7 +195,16 @@ export default function Landing() {
 		});
 		const response = await res.json();
 
-		await updateCourses();
+		await Promise.allSettled([
+			updateCourseHistory(),
+			updateSchedule(),
+		]);
+	};
+
+	const breakpoint = useMediaQuery(theme.breakpoints.down("sm"));
+
+	const height100Style = breakpoint ? {} : {
+		height: '100%',
 	};
 
 	return (
@@ -147,7 +213,9 @@ export default function Landing() {
 		justifyContent="center"
 		alignItems="stretch"
 		direction="row"
-		sx={{height: '100%'}}
+		sx={{
+			...height100Style,
+		}}
 		>
 			{ !user.loggedIn && <Navigate to="/Login" replace /> }
 			<Grid item sx={{flexGrow: 0}}>
@@ -161,7 +229,10 @@ export default function Landing() {
 				}}>
 					<Grid container justifyContent="center" alignItems="center">
 						<Grid item>
-							<IconButton><Avatar style={{width: 150, height: 150}}/></IconButton>
+							<input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+							<label htmlFor="icon-button-file">		
+								<IconButton aria-label="upload picture" component="span"><Avatar style={{width: 150, height: 150}}/></IconButton>
+							</label>
 						</Grid>
 					</Grid>
 					<Typography component={'div'} className={classes.userStyle}>
@@ -181,44 +252,102 @@ export default function Landing() {
 
 				</Paper>
 			</Grid>
-			<Grid item sx={{flexGrow: 2, height: '100%'}}>
+			<Grid item sx={{
+				flexGrow: 2,
+				...height100Style,
+			}}>
 				<Grid
 				container
-				direction="column"
-				sx={{height: '100%'}}
+				direction={breakpoint ? 'row' : 'column'}
+				sx={{
+					height: {
+						xs: null,
+						sm: '100%',
+					},
+				}}
 				>
-					<Grid item sx={{flexGrow: 2, height: '100%'}}>
+					<Grid item sx={{
+						flexGrow: 2,
+						...height100Style,
+					}}>
 						<Grid
 						container
 						alignItems="center"
 						justifyContent="space-evenly"
-						sx={{height: '100%'}}
+						sx={{
+							...height100Style,
+						}}
 						>
-							<Grid item sx={{flexGrow: 1, height: '100%', marginRight: 3}}>
+							<Grid item sx={{
+								flexGrow: 1,
+								...height100Style,
+								marginRight: 3,
+								marginLeft: 3,
+							}}>
 								<Grid
 								container
-								direction="column"
-								sx={{height: '100%'}}>
-									<Grid item sx={{flexGrow: 0}}>
+								direction={breakpoint ? 'row' : 'column'}
+								sx={{
+									...height100Style,
+								}}>
+									<Grid item sx={{
+										flexGrow: {
+											xs: 1,
+											sm: 0,
+										},
+									}}>
 										<Paper elevation={20} className={classes.minimalPaperStyle} style={{marginBottom: '10px'}}>
 											<form onSubmit={handleSetMajor}>
-												<Grid container>
-													<Grid item sx={{flexGrow: 1, margin: 'auto 1em'}}>
-														<Autocomplete className={classes.boxStyle}
-														options={majors.map(i => ({label: i.name, id: i.code}))}
-														renderInput={(params) => <TextField {...params} label="Major"/>}
-														selectOnFocus
-														clearOnBlur
-														handleHomeEndKeys
-														value={targetMajor}
-														onChange={(e, v) => setTargetMajor(v)}
-														isOptionEqualToValue={(option, value) => option.label === value}
-														/>
+												{
+													loadingMajors ?
+													<Grid container justifyContent="center" alignItems="center" sx={{
+														...height100Style,
+													}}>
+														<Grid item>
+															<CircularProgress/>
+														</Grid>
 													</Grid>
-													<Grid item>
-														<Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Set Major</Button>
+													:
+													<Grid container
+													direction="row"
+													justifyContent={{
+														xs: 'center',
+														sm: null,
+													}}
+													alignItems={{
+														xs: 'center',
+														sm: null,
+													}}
+													>
+														<Grid item sx={{
+															flexGrow: 1,
+															margin: 'auto 1em',
+															width: {
+																xs: 'calc(100% - 2em)',
+																sm: null,
+															},
+															boxSizing: {
+																xs: 'border-box',
+																sm: null,
+															},
+														}}>
+															<Autocomplete className={classes.boxStyle}
+															options={majors.map(i => ({label: i.name, id: i.code}))}
+															renderInput={(params) => <TextField {...params} label="Major"/>}
+															selectOnFocus
+															clearOnBlur
+															handleHomeEndKeys
+															value={targetMajor}
+															onChange={(e, v) => setTargetMajor(v)}
+															isOptionEqualToValue={(option, value) => option.label === value}
+															loading={loadingMajors}
+															/>
+														</Grid>
+														<Grid item>
+															<Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Set Major</Button>
+														</Grid>
 													</Grid>
-												</Grid>
+												}
 											</form>
 										</Paper>
 									</Grid>
@@ -226,50 +355,94 @@ export default function Landing() {
 										<Paper elevation={20} className={classes.minimalPaperStyle} style={{height: 'calc(100% - 30px)', boxSizing: 'border-box', marginTop: '10px', marginBottom: '10px'}}>
 											<Grid
 											container
-											direction="column"
-											sx={{height: '100%'}}
+											direction={breakpoint ? 'row' : 'column'}
+											sx={{
+												...height100Style,
+											}}
 											>
-												<Grid item sx={{flexGrow: 0}}>
+												<Grid item sx={{
+													flexGrow: {
+														xs: 1,
+														sm: 0,
+													},
+												}}>
 													<Typography className={classes.textStyle}>Your Previous Courses</Typography>
 												</Grid>
 												<Grid item sx={{flexGrow: 1, position: 'relative'}}>
-													<List sx={{
-														position: 'absolute',
-														top: 0,
-														left: 0,
-														right: 0,
-														bottom: 0,
-														overflow: 'auto',
-													}}>
-													{courseHistory.map(i =>
-														<ListItem  secondaryAction={
-															<IconButton edge="end" onClick={(e) => handleRemoveCourse(e, i)}>
-																<DeleteIcon/>
-															</IconButton>
-														}
-														key={i}
-														>
-															<ListItemText primaryTypographyProps={{fontFamily: 'Arvo', fontSize: '15px'}} primary={i}/>
-														</ListItem>
-													)}
-													</List>
+													{
+														loadingCourseHistory ?
+														<Grid container justifyContent="center" alignItems="center" sx={{
+															...height100Style,
+														}}>
+															<Grid item>
+																<CircularProgress/>
+															</Grid>
+														</Grid>
+														:
+														<List sx={{
+															position: {
+																xs: null,
+																sm: 'absolute',
+															},
+															top: 0,
+															left: 0,
+															right: 0,
+															bottom: 0,
+															overflow: 'auto',
+														}}>
+														{courseHistory.map(i =>
+															<ListItem  secondaryAction={
+																<IconButton edge="end" onClick={(e) => handleRemoveCourse(e, i)}>
+																	<DeleteIcon/>
+																</IconButton>
+															}
+															key={i}
+															>
+																<ListItemText primaryTypographyProps={{fontFamily: 'Arvo', fontSize: '15px'}} primary={i}/>
+															</ListItem>
+														)}
+														</List>
+													}
 												</Grid>
-												<Grid item sx={{flexGrow: 0}}>
+												<Grid item sx={{
+													flexGrow: {
+														xs: 1,
+														sm: 0,
+													},
+												}}>
 													<form onSubmit={handleAddCourse}>
 														<Grid container>
-															<Grid item sx={{flexGrow: 1, margin: 'auto 1em'}}>
+															<Grid item sx={{flexGrow: 1, margin: 'auto 10px'}}>
 																<Autocomplete className={classes.boxStyle}
 																options={courses}
-																renderInput={(params) => <TextField {...params} label="Courses"/>}
+																renderInput={(params) =>
+																	<TextField
+																	{...params}
+																	label="Courses"
+																	InputProps={{
+																		...params.InputProps,
+																		endAdornment: (
+																			<>
+																				{(loadingCourses && coursesOpen) ? <CircularProgress color="inherit" size={20} /> : null}
+																				{params.InputProps.endAdornment}
+																			</>
+																		),
+																	}}
+																	/>
+																}
 																selectOnFocus
 																clearOnBlur
 																handleHomeEndKeys
 																value={(targetCourse) ? targetCourse : null}
 																onChange={(e, v) => setTargetCourse(v)}
 																onInputChange={(e, v) => setTargetCourse(v)}
+																loading={loadingCourses}
+																open={coursesOpen}
+																onOpen={() => setCoursesOpen(true)}
+																onClose={() => setCoursesOpen(false)}
 																/>
 															</Grid>
-															<Grid item>
+															<Grid item sx={{flexGrow: 0}}>
 																<Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Add Course</Button>
 															</Grid>
 														</Grid>
@@ -280,9 +453,72 @@ export default function Landing() {
 									</Grid>
 								</Grid>
 							</Grid>
-							<Grid item sx={{flexGrow: 1, height: '100%', marginRight: 3}}>
+							<Grid item sx={{
+								flexGrow: 1,
+								...height100Style,
+								marginRight: 3,
+								marginLeft: 3,
+							}}>
 								<Paper elevation={20} className={classes.minimalPaperStyle} style={{height: 'calc(100% - 40px)', boxSizing: 'border-box'}}>
-									<Typography className={classes.textStyle}>Suggested plan</Typography>
+									<Grid
+									container
+									direction={breakpoint ? 'row' : 'column'}
+									sx={{
+										...height100Style,
+									}}
+									>
+										<Grid item sx={{flexGrow: 0}}>
+											<Typography className={classes.textStyle}>Suggested plan</Typography>
+										</Grid>
+										<Grid item sx={{flexGrow: 1, position: 'relative'}}>
+											{
+												loadingSchedule ?
+												<Grid container justifyContent="center" alignItems="center" sx={{
+													...height100Style,
+												}}>
+													<Grid item>
+														<CircularProgress/>
+													</Grid>
+												</Grid>
+												:
+												<List sx={{
+													position: {
+														xs: null,
+														sm: 'absolute',
+													},
+													top: 0,
+													left: 0,
+													right: 0,
+													bottom: 0,
+													overflow: 'auto',
+												}}>
+												{schedule.map((v, i) =>
+													<ListItem
+													key={i}
+													>
+														<Grid
+														container
+														direction="column"
+														>
+															<Grid item>
+																<ListItemText primaryTypographyProps={{fontFamily: 'Arvo', fontSize: '30px'}} primary={`Semester ${i + 1}`}/>
+															</Grid>
+															<Grid item>
+																<List>
+																{v.map((v2, i2) =>
+																	<ListItem key={`${v2}-${i2}`}>
+																		<ListItemText primaryTypographyProps={{fontFamily: 'Arvo', fontSize: '15px'}} primary={v2}/>
+																	</ListItem>
+																)}
+																</List>
+															</Grid>
+														</Grid>
+													</ListItem>
+												)}
+												</List>
+											}
+										</Grid>
+									</Grid>
 								</Paper>
 							</Grid>
 						</Grid>
