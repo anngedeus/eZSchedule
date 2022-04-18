@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/user.js';
 import APIError from '../lib/api-errors.js';
+import APIResponse from '../lib/api-response.js';
 
 interface CourseHistoryDeleteRequest {
 	courseCodes: string[],
@@ -16,12 +17,8 @@ namespace CourseHistoryDeleteRequest {
 	}
 };
 
-interface CourseHistoryDeleteResponse {
-	error: APIError,
-};
-
 export default async (req: express.Request, res: express.Response) => {
-	let resbody: CourseHistoryDeleteResponse = {
+	let resbody: APIResponse = {
 		error: APIError.BadRequest,
 	};
 
@@ -32,7 +29,7 @@ export default async (req: express.Request, res: express.Response) => {
 
 	try {
 		await User.updateOne({
-			_id: req.params.userID,
+			_id: req.user.id,
 		}, {
 			$pull: {
 				completedCourses: {

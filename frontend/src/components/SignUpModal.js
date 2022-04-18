@@ -1,38 +1,55 @@
 import React from 'react'
-import { Grid, Paper, Typography, TextField, Button, makeStyles } from '@material-ui/core'
-import FormControl from '@material-ui/core/FormControl';
-import { NavLink } from 'react-router-dom'
+import { Grid, Paper, Typography, TextField, Button, makeStyles, InputAdornment } from '@material-ui/core'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import EmailIcon from '@mui/icons-material/Email';
+import lscache from 'lscache';
+import { Alert } from '@mui/material';
+import { useUser } from './User';
 
+export default React.forwardRef((props, ref) => {
+    const navigate = useNavigate();
+    const user = useUser();
 
-export default function SignUp() {
+    const [failureMessage, setFailureMessage] = React.useState('');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('#reg-form')
-        const submit = document.querySelector('submit')
-        form.addEventListener(submit, registerUser)
+    async function registerUser(event) {
+        event.preventDefault();
+        const name = document.querySelector('#name').value
+        const email = document.querySelector('#email').value
+        const password = document.querySelector('#password').value
 
-        async function registerUser(event) {
-            event.preventDefault();
-            const name = document.querySelector('#name').value
-            const email = document.querySelector('#email').value
-            const password = document.querySelector('#password').value
-    
-            const result = await fetch('/api/register', {
+        try {
+            const result = await fetch('/api/create-user', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify ({
+                body: JSON.stringify({
                     name,
                     email,
-                    password     
-                }).then((res) => res.json())
-            })
-    
-            console.log(result)
-    
+                    password,
+                }),
+            });
+
+            const response = await result.json();
+
+            if (response.error !== 0) {
+                setFailureMessage('Account with that email already exists');
+            } else {
+                setFailureMessage('');
+
+                lscache.set('token', response.token, 1440 /* minutes */);
+                lscache.set('name', name);
+                user.updateUser(response.token, response.name, response.major);
+
+                navigate('/', { replace: true });
+            }
+        } catch (e) {
+            setFailureMessage('An internal error occurred');
         }
-    });
+    }
 
     const UseStyles = makeStyles((theme) => ({
         paperStyle: {
@@ -42,16 +59,14 @@ export default function SignUp() {
         },
         headerStyle: {
             margin: 0,
-            marginTop: 15
-        },
-        avatarStyle: {
-            backgroundColor: '#1bbd7e'
+            marginTop: 15,
+            fontFamily: 'Arvo'
         },
         marginTop: {
             marginTop: 5
         },
         linkcustom: {
-            fontFamily: "Arvo",
+            fontFamily: 'Callie Chalk Font',
             fontSize: "40px",
             textDecoration: "none",
             color: "black",
@@ -62,30 +77,44 @@ export default function SignUp() {
 
     const classes = UseStyles();
 
-    return (  
-        
-        <Grid>
-        <Paper elevation={20} className={classes.paperStyle}>
+    return (
+        <Paper elevation={0} className={classes.paperStyle}>
+            { user.loggedIn && <Navigate to="/" replace /> }
             <Grid align='center'>
                 <div>
-                    <NavLink to="/" exact  className={classes.linkcustom} style={{color: '#FEDB74', justifyContent: 'center'}}>
+                    <NavLink to="/" className={classes.linkcustom} style={{color: '#F5BB10', justifyContent: 'center'}}>
                         eZ Schedule.
                     </NavLink>
                  </div>
                 <h2 className={classes.headerStyle}>Sign Up</h2>
-                <Typography variant='caption' gutterBottom>Please fill this form to create an account!</Typography>
+                <Typography variant='caption' gutterBottom style={{fontFamily: 'Arvo'}}>Please fill this form to create an account!</Typography>
             </Grid>
-            <form id='reg-form'>
-                <TextField fullWidth id="name" label='Name' placeholder="Enter your name" />
-                <TextField fullWidth id="email" label='Email' placeholder="Enter your email" />
-                <FormControl component="fieldset" className={classes.marginTop}></FormControl>
-                <TextField fullWidth id="password" label='Password' placeholder="Enter your password" type="password"/>
-                <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" type="password"/>
+            <form id='reg-form' onSubmit={registerUser}>
+                <TextField fullWidth id="name" 
+                label='Name' 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start"><AccountCircleIcon/></InputAdornment>}}
+                />
+                <TextField fullWidth id="email" 
+                label='Email' 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start"><EmailIcon/></InputAdornment>}}
+                />
+                <TextField fullWidth id="password" 
+                label='Password'
+                type="password" 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}}
+                />
+                <TextField fullWidth 
+                label='Confirm Password' 
+                type="password" 
+                margin="normal"
+                InputProps={{startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}}
+                />
+                { failureMessage.length > 0 && <Alert severity="error" style={{ marginTop: 25 }}>{failureMessage}</Alert> }
                 <Button style={{marginTop: 25}} type='submit' variant='contained' color='secondary'>Create Account</Button>
             </form>
         </Paper>
-    </Grid>
-     
     )
-    
-}
+})

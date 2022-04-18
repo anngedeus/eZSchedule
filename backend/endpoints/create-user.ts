@@ -1,10 +1,13 @@
 import User from '../models/user.js';
 import express from 'express';
 import APIError from '../lib/api-errors.js';
+import { hash } from 'bcrypt';
+import APIResponse from '../lib/api-response.js';
 
 interface CreateUserRequest {
 	email: string,
-	password: string, // FIXME: this is insecure
+	password: string,
+	name: string,
 };
 
 namespace CreateUserRequest {
@@ -13,9 +16,9 @@ namespace CreateUserRequest {
 	}
 };
 
-interface CreateUserResponse {
-	error: APIError,
+interface CreateUserResponse extends APIResponse {
 	userID?: string,
+	token?: string,
 };
 
 export default async (req: express.Request, res: express.Response) => {
@@ -31,9 +34,11 @@ export default async (req: express.Request, res: express.Response) => {
 	try {
 		const user = await User.create({
 			email: req.body.email,
-			password: req.body.password,
+			password: await hash(req.body.password, 10),
 			completedCourses: [],
+			name: req.body.name,
 		});
+		resbody.token = await user.generateToken();
 		resbody.userID = user.id;
 	} catch (e) {
 		res.status(400).json(resbody);

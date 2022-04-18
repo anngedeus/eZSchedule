@@ -3,18 +3,20 @@ import User from '../models/user.js';
 import APIError from '../lib/api-errors.js';
 import APIResponse from '../lib/api-response.js';
 
-interface CourseHistoryGetResponse extends APIResponse {
-	courses?: string[],
+interface UserInfoGetResponse extends APIResponse {
+	name?: string,
+	major?: string,
 };
 
 export default async (req: express.Request, res: express.Response) => {
-	let resbody: CourseHistoryGetResponse = {
+	let resbody: UserInfoGetResponse = {
 		error: APIError.BadRequest,
 	};
 
 	try {
-		const result = await User.findById(req.user.id, 'completedCourses').exec();
-		resbody.courses = result.completedCourses;
+		const result = await User.findById(req.user.id, 'major name').exec();
+		resbody.name = result.name;
+		resbody.major = (result.major) ? result.major : null;
 	} catch (e) {
 		res.status(400).json(resbody);
 		return;

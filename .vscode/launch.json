@@ -27,6 +27,16 @@
 			],
 			"cwd": "${workspaceFolder}/backend",
 			"type": "node"
+		},
+		{
+			"name": "Launch backend",
+			"program": "${workspaceFolder}/backend/build/server.js",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/backend",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"type": "node"
 		}
 	]
 }
