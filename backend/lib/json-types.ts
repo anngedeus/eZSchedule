@@ -46,6 +46,7 @@ export type DegreeRequirement = CreditRequirement;
 
 export interface DegreeCourseInfo {
 	code: MajorCode,
+	name: string,
 	criticalTracking: CriticalTrackingInfo,
 	otherRequiredCourses: CourseEntry,
 	otherRequirements: DegreeRequirement[],

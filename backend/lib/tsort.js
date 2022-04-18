@@ -76,8 +76,8 @@
       ["COP3503", "EEL3701"]
     ]
 
-    var sorted = tsort(csPrereqs);
-    console.log("Here's your CS course order:", sorted);
+    var preReqs = tsort(csPrereqs);
+    return preReqs;
   }
   //if major is CE
   export function generateCE(){
@@ -109,8 +109,8 @@
       ["COP3503", "EEL3701"]
     ]
 
-    var sorted = tsort(cePrereqs);
-    console.log("Here's your CE course order:", sorted);
+    var preReqs = tsort(cePrereqs);
+    return preReqs;
   }
 
 
@@ -143,3 +143,26 @@
       console.log(e.message);
     }
   }
+
+function filterCourses(taken, preReqs){
+  for (let i = 0; i < taken.length; i++){
+    console.log(taken[i]);
+    for (let j = 0; j < preReqs.length; j++){
+      if (preReqs[j] == taken[i]){
+        preReqs.splice(j,1);
+        break;
+      }
+    }
+  }
+
+  var semesters = [];
+  for (let i = 0; i < preReqs.length; i++){ //run through all necessary classes
+    for (let j = 0; j < preReqs.length; j++){ //semester limit 4 classes
+      //if (preReqs[i] )
+    }
+  }
+  //need to put the part of the schedule generator where they split into semesters
+  //need to make sure that physics 1 and 2 aren't in the same semester, etc.
+
+  return preReqs;
+}
