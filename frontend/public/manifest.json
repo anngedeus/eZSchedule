@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "eZ Schedule",
+  "name": "eZ Schedule",
   "icons": [
     {
       "src": "favicon.ico",

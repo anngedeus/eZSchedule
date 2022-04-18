@@ -6,7 +6,7 @@
  * @returns Array : topological sorted list of IDs
  **/
 
- function tsort(edges) {
+ export function tsort(edges) {
   var nodes   = {}, // hash: stringified id of the node => { id: id, afters: lisf of ids }
       sorted  = [], // sorted list of IDs ( returned value )
       visited = {}; // hash: id of already visited node => true
@@ -52,8 +52,9 @@
 }
 
 //if major is CS
-var csPrereqs = [
+export var csPrereqs = [
   ["CIS4914", "Graduate"],
+  ["EGS4034", "Graduate"],
   ["COP4600", "CNT4007"],
   ["COP3530", "COP4600"],
   ["COP3503", "COP3530"],
@@ -70,6 +71,7 @@ var csPrereqs = [
   ["COP3503", "CIS4301"],
   ["COT3100", "CIS4301"],
   ["COP3503", "EEL3701"],
+  ["CHM2045", "CHM2046"],
   ["MAC2311", "MAC2312"],
   ["MAC2312", "MAC2313"],
   ["MAC2311", "COP3503"],
@@ -80,7 +82,7 @@ var csPrereqs = [
   ["start", "CHM2045"],
   ["start", "ENC3246"]
 ]
-function generateCS(csPrereqs){
+export function generateCS(csPrereqs){
   var preReqs = tsort(csPrereqs);
   preReqs = preReqs.splice(1,preReqs.length-2);
   return preReqs;
@@ -88,9 +90,10 @@ function generateCS(csPrereqs){
 
 
 //if major is CE
-var cePrereqs = [
+export var cePrereqs = [
   ["JRDESIGN", "Graduate"],
   ["SRDESIGN", "Graduate"],
+  ["JRDESIGN", "SRDESIGN"],
   ["CHM2045", "CHM2046"],
   ["PHY2049", "EEL3111"],
   ["MAC2312", "EEL3135"],
@@ -111,6 +114,7 @@ var cePrereqs = [
   ["COP3503", "CDA3101"],
   ["COT3100", "CDA3101"],
   ["COP3503", "EEL3701"],
+  ["CHM2045", "CHM2046"],
   ["MAC2311", "MAC2312"],
   ["MAC2312", "MAC2313"],
   ["MAC2311", "MAP2302"],
@@ -122,13 +126,13 @@ var cePrereqs = [
   ["start", "CHM2045"],
   ["start", "ENC3246"]
 ]
-function generateCE(cePrereqs){
+export function generateCE(cePrereqs){
   var preReqs = tsort(cePrereqs);
   preReqs = preReqs.splice(1,preReqs.length-2);
   return preReqs;
 }
 
-function filterCourses(taken, preReqs, major){
+export function filterCourses(taken, preReqs, major){
   outerloop: for (let i = 0; i < taken.length; i++){
     //console.log(taken[i]);
     for (let j = 0; j < preReqs.length; j++){
@@ -143,11 +147,12 @@ function filterCourses(taken, preReqs, major){
   let j = 0;
   var techEs = 5, minors = 0, brEs = 0;
 
-  if (major == "CSP_BSCS"){
+  if (major == "CPS_BSCS"){
       minors += 5;
   }
-  if (major == "CSP_BSCE"){
+  if (major == "CPE_BSCE"){
       brEs += 2;
+      techEs += 1;
   }
   coursesloop: for (let i = 0; i < preReqs.length; i++){ //run through all necessary classes
      //semester number we're on
@@ -163,27 +168,27 @@ function filterCourses(taken, preReqs, major){
         continue coursesloop;
     }
 //need to make sure that physics 1 and 2 aren't in the same semester, etc.    
-    parseloop: for (let k = 0; k < numClasses; k++){
-        //console.log("Checking course ", k+1, " in semester ", j+1);
-        for (let l = 0; l < cePrereqs.length; l++){
-            if(cePrereqs[l][1] == preReqs[i] && semesters[j][k] == cePrereqs[l][0]){ //could be refined to see if prerequisite and not same prefix
-                semesters[j+1].push(preReqs[i]);
-                if(minors > 0){
-                    semesters[j].push("MINOR CLASS");
-                    minors--;
-                }
-                else if(brEs > 0){
-                    semesters[j].push("BREADTH ELECTIVE");
-                    brEs--;
-                }
-                else if(techEs > 0){
-                    semesters[j].push("TECH ELECTIVE");
-                    techEs--;
-                }
-                //console.log("ADDING ", preReqs[i], " TO NEXT SEMESTER");
-                continue coursesloop;
+    for (let k = 0; k < numClasses; k++){
+      //console.log("Checking course ", k+1, " in semester ", j+1);
+      for (let l = 0; l < cePrereqs.length; l++){
+        if(cePrereqs[l][1] == preReqs[i] && semesters[j][k] == cePrereqs[l][0]){ //could be refined to see if prerequisite and not same prefix
+            semesters[j+1].push(preReqs[i]);
+            if(minors > 0){
+                semesters[j].push("MINOR CLASS");
+                minors--;
             }
+            else if(brEs > 0){
+                semesters[j].push("BREADTH ELECTIVE");
+                brEs--;
+            }
+            else if(techEs > 0){
+                semesters[j].push("TECH ELECTIVE");
+                techEs--;
+            }
+            //console.log("ADDING ", preReqs[i], " TO NEXT SEMESTER");
+            continue coursesloop;
         }
+      }
     }
     //console.log("ADDING ", preReqs[i], numClasses, j);
     semesters[j].push(preReqs[i]);
@@ -217,8 +222,8 @@ function filterCourses(taken, preReqs, major){
   return semesters;
 }
 
-function main(){
-  var major = "CSP_BSCS";
+function test(){
+  var major = "CPS_BSCS";
   var taken = ["PHY2048", "MAC2311", "COP3502", "CHM2045"];
   console.log("Here's what you've taken", taken);
   var preReqs = generateCS(csPrereqs);
@@ -237,7 +242,7 @@ function main(){
 // for node.js
 if (typeof exports == 'object' && exports === this) {
   module.exports = tsort;
-  if (process.argv[1] === __filename) main();
+  if (process.argv[1] === __filename) test();
 }
 
 //testing the top sort with numbers / letters

@@ -2,6 +2,7 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"jest.jestCommandLine": "npm run test --",
 	"cSpell.words": [
-		"corequisites"
+		"corequisites",
+		"lscache"
 	]
 }
