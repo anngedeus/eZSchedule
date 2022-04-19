@@ -71,7 +71,6 @@ export var csPrereqs = [
   ["COP3503", "CIS4301"],
   ["COT3100", "CIS4301"],
   ["COP3503", "EEL3701"],
-  ["CHM2045", "CHM2046"],
   ["MAC2311", "MAC2312"],
   ["MAC2312", "MAC2313"],
   ["MAC2311", "COP3503"],
@@ -79,7 +78,6 @@ export var csPrereqs = [
   ["COP3503", "COT4501"],
   ["start", "MAC2311"],
   ["start", "PHY2048"],
-  ["start", "CHM2045"],
   ["start", "ENC3246"]
 ]
 export function generateCS(csPrereqs){
