@@ -73,10 +73,11 @@ function extractImageURL(elm: cheerio.Cheerio<cheerio.Element>): string {
 			code = basename((new URL(url)).pathname);
 		}
 
-		const type = $('span.type', elm).text().trim();
+		const type = $('span.type', elm).text().trim().split(' ')[0];
 
-		if (type != 'major' && type != 'minor' && type != 'certificate') {
-			throw new Error("Invalid program type");
+		if (type !== 'major' && type !== 'minor' && type !== 'certificate') {
+			console.log("Unknown program type: " + type);
+			return;
 		}
 
 		programs.push({
