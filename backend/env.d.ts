@@ -6,6 +6,7 @@ declare global {
 			PORT?: string,
 			ATLAS_URI?: string,
 			JWT_SECRET?: string,
+			STATIC_DIR?: string,
 		}
 	}
 }

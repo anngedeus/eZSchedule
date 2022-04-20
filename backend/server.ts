@@ -22,7 +22,11 @@ import userInfoGetHandler from './endpoints/user-info-get.js';
 import userInfoSetHandler from './endpoints/user-info-set.js';
 import scheduleHandler from './endpoints/schedule.js';
 
-config();
+import { fileURLToPath } from 'url';
+
+config({
+	path: fileURLToPath(new URL('./.env', import.meta.url)),
+});
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -117,7 +121,7 @@ app.get('/api/user-info', authenticateUser, userInfoGetHandler);
 app.put('/api/user-info', authenticateUser, userInfoSetHandler);
 app.get('/api/schedule', authenticateUser, scheduleHandler);
 
-app.use(express.static('../frontend/build'));
+app.use(express.static(process.env.STATIC_DIR || fileURLToPath(new URL('./static', import.meta.url))));
 
 app.listen(port, () => {
 	console.log(`Server is running on port: ${port}`);
