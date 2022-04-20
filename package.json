@@ -1,0 +1,25 @@
+{
+  "name": "ezschedule-cen3031",
+  "version": "1.0.0",
+  "description": "WELCOME",
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "shx": "^0.3.4"
+  },
+  "scripts": {
+    "build": "shx rm -rf build && cd backend && npm i && npm run build && cd .. && cd frontend && npm i && npm run build && cd .. && shx mv backend/build build && shx mv frontend/build build/static"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anngedeus/eZSchedule-CEN3031.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anngedeus/eZSchedule-CEN3031/issues"
+  },
+  "homepage": "https://github.com/anngedeus/eZSchedule-CEN3031#readme"
+}
