@@ -10,7 +10,7 @@
     "shx": "^0.3.4"
   },
   "scripts": {
-    "build": "shx rm -rf build && cd backend && npm run build && cd .. && cd frontend && npm run build && cd .. && shx mv backend/build build && shx mv frontend/build build/static"
+    "build": "shx rm -rf build && cd backend && npm i && npm run build && cd .. && cd frontend && npm i && npm run build && cd .. && shx mv backend/build build && shx mv frontend/build build/static"
   },
   "repository": {
     "type": "git",
